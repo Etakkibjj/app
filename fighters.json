@@ -1,0 +1,74 @@
+[
+  {
+    "id": "gordon-ryan",
+    "name": "Gordon Ryan",
+    "nickname": "The King",
+    "country": "USA",
+    "weight_category": "Heavyweight / Super Heavyweight",
+    "physical_attributes": {
+      "weight_kg": 99,
+      "height_cm": 188,
+      "stamina": 9,
+      "flexibility": 6,
+      "strength": 10
+    },
+    "style": "Systematic Positional Control",
+    "signature_submission": "Rear Naked Choke",
+    "best_guards": [
+      "Butterfly Guard",
+      "Half Guard / Quarter Guard",
+      "Single Leg X"
+    ],
+    "passing_style": [
+      "Half Guard Pressure Passing",
+      "Float Passing",
+      "Bodylock Pass"
+    ],
+    "takedowns": [
+      "Snapdown to Front Headlock",
+      "Ankle Pick"
+    ],
+    "game_traits": {
+      "leg_locks": 9,
+      "back_takes": 10,
+      "wrestling": 8,
+      "guard_passing": 10,
+      "guard_playing": 9
+    }
+  },
+  {
+    "id": "mikey-musumeci",
+    "name": "Mikey Musumeci",
+    "nickname": "Darth Rigatoni",
+    "country": "USA",
+    "weight_category": "Roosterweight / Flyweight",
+    "physical_attributes": {
+      "weight_kg": 61,
+      "height_cm": 167,
+      "stamina": 9,
+      "flexibility": 10,
+      "strength": 6
+    },
+    "style": "Hyper-Technical Retention & Leg Locks",
+    "signature_submission": "Aoki Lock / Mikey Lock",
+    "best_guards": [
+      "K-Guard",
+      "Open Guard / De La Riva",
+      "Crab Ride"
+    ],
+    "passing_style": [
+      "Torreando",
+      "Loose Passing"
+    ],
+    "takedowns": [
+      "Guard Pull"
+    ],
+    "game_traits": {
+      "leg_locks": 10,
+      "back_takes": 9,
+      "wrestling": 4,
+      "guard_passing": 6,
+      "guard_playing": 10
+    }
+  }
+]
