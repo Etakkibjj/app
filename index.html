@@ -3,161 +3,452 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EJJ Grappling Gauntlet</title>
-    <!-- Rutas corregidas directamente a la raíz del repositorio -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="responsive.css">
-    <link rel="manifest" href="manifest.json">
+    <title>Game Plan Generator Template</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: #15171e;
+            --card-border: #222632;
+            --accent-color: #e5c158;
+            --text-main: #ffffff;
+            --text-muted: #8c92a4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace, sans-serif;
+            letter-spacing: 1px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Cabecera de Paso */
+        .step-header {
+            margin-bottom: 30px;
+        }
+
+        .step-indicator {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .step-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .step-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* Pantallas del Wizard */
+        .step-screen {
+            display: none;
+        }
+
+        .step-screen.active {
+            display: block;
+        }
+
+        /* Grilla de Tarjetas */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--text-muted);
+        }
+
+        .card.selected {
+            border-color: var(--accent-color);
+            background-color: #181b24;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Slider personalizado */
+        .slider-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .slider-value {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-color);
+            background: var(--card-border);
+            height: 4px;
+            cursor: pointer;
+        }
+
+        /* Botones de Navegación Inferior */
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--card-border);
+            padding-top: 25px;
+            margin-top: auto;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 12px 30px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 2px;
+        }
+
+        .btn:hover {
+            border-color: var(--text-main);
+        }
+
+        .btn-primary {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .btn-full {
+            width: 100%;
+            text-align: center;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            font-weight: bold;
+            border: none;
+            padding: 16px;
+        }
+
+        .btn-full:hover {
+            opacity: 0.9;
+        }
+
+        /* Pantalla de Carga */
+        #loading-screen {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        #loading-screen .step-title {
+            margin-bottom: 20px;
+        }
+
+        /* Pantalla de Resultados */
+        .result-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .result-box h3 {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 8px;
+        }
+
+        .result-box p, .result-box li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .result-box ul {
+            list-style: none;
+        }
+
+        .result-box li {
+            margin-bottom: 8px;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Barra de Navegación Lateral / Superior -->
-        <header class="app-header">
-            <div class="brand">
-                <span class="brand-badge">EJJ</span>
-                <h1>GRAPPLING GAUNTLET</h1>
+
+    <div class="container">
+
+        <!-- PASO 1: Estilo / Identidad -->
+        <div class="step-screen active" id="step-1">
+            <div class="step-header">
+                <div class="step-indicator">Step 01 — Identity</div>
+                <h2 class="step-title">Your Natural Style</h2>
+                <p class="step-subtitle">Your game plan should fit you — not a highlight reel.</p>
             </div>
-            <nav class="nav-menu" id="navMenu">
-                <button class="nav-btn active" data-target="dashboard">Dashboard</button>
-                <button class="nav-btn" data-target="planner">Planificador</button>
-                <button class="nav-btn" data-target="sessions">Sesiones BJJ</button>
-                <button class="nav-btn" data-target="strength">Fuerza & S&C</button>
-                <button class="nav-btn" data-target="techniques">Biblioteca</button>
-                <button class="nav-btn" data-target="gameplans">Game Plans</button>
-                <button class="nav-btn" data-target="progress">Progreso</button>
-                <button class="nav-btn" data-target="goals">Objetivos</button>
-            </nav>
-        </header>
+            <div class="options-grid">
+                <div class="card selected" onclick="selectCard(this, 'single')">
+                    <div class="card-title">💪 Pressure Player</div>
+                    <div class="card-desc">Strong, heavy. Grind top position.</div>
+                </div>
+                <div class="card" onclick="selectCard(this, 'single')">
+                    <div class="card-title">🕷️ Guard Player</div>
+                    <div class="card-desc">Technical, flexible. Comfortable off your back.</div>
+                </div>
+                <div class="card" onclick="selectCard(this, 'single')">
+                    <div class="card-title">⚡ Sub Hunter</div>
+                    <div class="card-desc">Aggressive, mobile. Chasing the tap everywhere.</div>
+                </div>
+                <div class="card" onclick="selectCard(this, 'single')">
+                    <div class="card-title">♟️ Chess Player</div>
+                    <div class="card-desc">Methodical. Control, score, minimise risk.</div>
+                </div>
+            </div>
+        </div>
 
-        <!-- Contenido Dinámico por Módulos -->
-        <main class="app-content" id="appContent">
-            <!-- Vista Dashboard (Por defecto) -->
-            <section id="dashboard" class="view active">
-                <div class="view-header">
-                    <h2>Panel de Control</h2>
-                    <p>Resumen general de tu rendimiento y preparación en grappling.</p>
+        <!-- PASO 2: Debilidades / Evaluación -->
+        <div class="step-screen" id="step-2">
+            <div class="step-header">
+                <div class="step-indicator">Step 02 — Assessment</div>
+                <h2 class="step-title">Biggest Weakness</h2>
+                <p class="step-subtitle">A real game plan attacks your gaps. Select up to 2.</p>
+            </div>
+            <div class="options-grid">
+                <div class="card" onclick="selectCard(this, 'multiple', 2)">
+                    <div class="card-title">Escapes</div>
+                    <div class="card-desc">Getting stuck under side control, mount, back.</div>
                 </div>
-                <div class="dashboard-grid">
-                    <div class="card stat-card">
-                        <h3>Próxima Sesión</h3>
-                        <p class="stat-value">No programada</p>
-                        <button class="btn-primary" onclick="app.navigateTo('planner')">Planificar entrenamiento</button>
-                    </div>
-                    <div class="card stat-card">
-                        <h3>Entrenamientos (Semana)</h3>
-                        <p class="stat-value">0</p>
-                        <span class="stat-sub">Objetivo: 4 sesiones</span>
-                    </div>
-                    <div class="card stat-card">
-                        <h3>Distribución Gi / No-Gi</h3>
-                        <div class="radar-placeholder">
-                            <div class="radar-ring"></div>
-                            <span class="radar-text">Sin datos suficientes</span>
-                        </div>
-                    </div>
+                <div class="card" onclick="selectCard(this, 'multiple', 2)">
+                    <div class="card-title">Guard Passing</div>
+                    <div class="card-desc">Can't get past the legs consistently.</div>
                 </div>
-            </section>
+                <div class="card" onclick="selectCard(this, 'multiple', 2)">
+                    <div class="card-title">Finishing</div>
+                    <div class="card-desc">Dominant positions but can't close it out.</div>
+                </div>
+                <div class="card" onclick="selectCard(this, 'multiple', 2)">
+                    <div class="card-title">Cardio / Pacing</div>
+                    <div class="card-desc">Gassing out mid-roll and losing position.</div>
+                </div>
+            </div>
+        </div>
 
-            <!-- Vista Planificador -->
-            <section id="planner" class="view">
-                <div class="view-header">
-                    <h2>Planificador de Entrenamiento</h2>
-                    <p>Programa tus próximas sesiones de grappling o S&C.</p>
+        <!-- PASO 3: Frecuencia de Entrenamiento -->
+        <div class="step-screen" id="step-3">
+            <div class="step-header">
+                <div class="step-indicator">Step 03 — Final Details</div>
+                <h2 class="step-title">Training & Goal</h2>
+                <p class="step-subtitle">Calibrate your schedule and primary objective.</p>
+            </div>
+            
+            <div class="slider-container">
+                <div class="slider-header">
+                    <span>Days Training Per Week</span>
+                    <span class="slider-value" id="slider-val">3 Days</span>
                 </div>
-                <div class="card">
-                    <form id="plannerForm">
-                        <div style="display: flex; flex-direction: column; gap: 1rem;">
-                            <label>Fecha y Hora: <input type="datetime-local" id="planDate" required></label>
-                            <label>Modalidad: 
-                                <select id="planModalidad">
-                                    <option value="BJJ Gi">BJJ Gi</option>
-                                    <option value="BJJ No-Gi">BJJ No-Gi</option>
-                                    <option value="Wrestling">Wrestling</option>
-                                    <option value="Sparring / Open Mat">Sparring / Open Mat</option>
-                                    <option value="Preparación Física">Preparación Física</option>
-                                </select>
-                            </label>
-                            <label>Objetivo principal: <input type="text" id="planObjetivo" placeholder="Ej. Retención de guardia cerrada"></label>
-                            <button type="submit" class="btn-primary">Programar Sesión</button>
-                        </div>
-                    </form>
-                </div>
-                <div style="margin-top: 1.5rem;">
-                    <h3>Sesiones Planificadas</h3>
-                    <div id="plannedList" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;"></div>
-                </div>
-            </section>
+                <input type="range" id="days-slider" min="1" max="6" value="3" oninput="updateSlider(this.value)">
+            </div>
 
-            <!-- Vista Registro de Sesiones BJJ -->
-            <section id="sessions" class="view">
-                <div class="view-header">
-                    <h2>Registro de Sesiones BJJ</h2>
-                    <p>Guarda el detalle de lo entrenado, rounds y RPE.</p>
-                </div>
-                <div class="card">
-                    <form id="sessionForm">
-                        <div style="display: flex; flex-direction: column; gap: 1rem;">
-                            <label>Fecha: <input type="date" id="sessDate" required></label>
-                            <label>Modalidad: 
-                                <select id="sessModalidad">
-                                    <option value="BJJ Gi">BJJ Gi</option>
-                                    <option value="BJJ No-Gi">BJJ No-Gi</option>
-                                    <option value="Wrestling">Wrestling</option>
-                                    <option value="Sparring / Open Mat">Sparring / Open Mat</option>
-                                </select>
-                            </label>
-                            <label>Duración (minutos): <input type="number" id="sessDuration" value="90"></label>
-                            <label>Intensidad percibida (RPE 1-10): <input type="number" id="sessRPE" min="1" max="10" value="8"></label>
-                            <label>Observaciones / Notas: <textarea id="sessNotes" placeholder="Técnicas practicadas, sensaciones..." style="height: 80px;"></textarea></label>
-                            <button type="submit" class="btn-primary">Guardar Sesión Realizada</button>
-                        </div>
-                    </form>
-                </div>
-                <div style="margin-top: 1.5rem;">
-                    <h3>Historial de Sesiones</h3>
-                    <div id="sessionsList" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;"></div>
-                </div>
-            </section>
+            <button class="btn btn-full" onclick="generatePlan()">Generate My Game Plan</button>
+        </div>
 
-            <!-- Vistas adicionales -->
-            <section id="strength" class="view">
-                <div class="view-header">
-                    <h2>Strength & Conditioning</h2>
-                    <p>Control de cargas, repeticiones y récords personales.</p>
-                </div>
-            </section>
+        <!-- PANTALLA DE CARGA -->
+        <div class="step-screen" id="loading-screen">
+            <div class="step-title">Building Your Game Plan</div>
+            <p class="step-subtitle" id="loading-text">Calculating weak points...</p>
+        </div>
 
-            <section id="techniques" class="view">
-                <div class="view-header">
-                    <h2>Biblioteca Técnica</h2>
-                    <p>Taxonomía y seguimiento de dominio técnico.</p>
+        <!-- PANTALLA DE RESULTADOS -->
+        <div class="step-screen" id="result-screen">
+            <div class="step-header">
+                <div class="badge-container">
+                    <div class="badge">Personalised Game Plan</div>
+                    <div class="badge">AI Generator</div>
                 </div>
-            </section>
+                <h2 class="step-title">Pressure Game Plan</h2>
+            </div>
 
-            <section id="gameplans" class="view">
-                <div class="view-header">
-                    <h2>Game Plan Builder</h2>
-                    <p>Diseño visual de sistemas tácticos de grappling.</p>
-                </div>
-            </section>
+            <div class="result-box">
+                <h3>Game Plan Identity</h3>
+                <p>You're a top pressure competitor who needs to capitalize on dominant transitions. Build your game around initiating top control and keeping opponents uncomfortable.</p>
+            </div>
 
-            <section id="progress" class="view">
-                <div class="view-header">
-                    <h2>Progreso y Analítica</h2>
-                    <p>Evolución de rendimiento basada en registros reales.</p>
-                </div>
-            </section>
+            <div class="result-box">
+                <h3>Primary Attack Sequence</h3>
+                <ul>
+                    <li>→ 1. Knee slice pass to cross-side control</li>
+                    <li>→ 2. Heavy cross-side pressure into back take</li>
+                    <li>→ 3. Collar choke setup from dominant angles</li>
+                </ul>
+            </div>
 
-            <section id="goals" class="view">
-                <div class="view-header">
-                    <h2>Objetivos</h2>
-                    <p>Metas semanales, mensuales y trimestrales.</p>
-                </div>
-            </section>
-        </main>
+            <button class="btn btn-full" onclick="resetWizard()">← Start Over</button>
+        </div>
+
     </div>
 
-    <!-- Ruta corregida directamente a la raíz -->
-    <script type="module" src="app.js"></script>
+    <!-- Navegación inferior fija -->
+    <div class="container" id="persistent-footer">
+        <div class="nav-footer">
+            <button class="btn" id="prev-btn" onclick="changeStep(-1)">← Back</button>
+            <button class="btn btn-primary" id="next-btn" onclick="changeStep(1)">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        function showStep(step) {
+            // Ocultar todas las pantallas
+            document.querySelectorAll('.step-screen').forEach(el => el.classList.remove('active'));
+            
+            // Mostrar la actual
+            if (step <= totalSteps) {
+                document.getElementById(`step-${step}`).classList.add('active');
+                document.getElementById('persistent-footer').style.display = 'flex';
+            } else {
+                document.getElementById('persistent-footer').style.display = 'none';
+            }
+
+            // Gestionar botones de navegación
+            document.getElementById('prev-btn').style.display = (step === 1) ? 'none' : 'block';
+        }
+
+        function changeStep(direction) {
+            currentStep += direction;
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > totalSteps) currentStep = totalSteps;
+            showStep(currentStep);
+        }
+
+        function selectCard(cardElement, mode, maxSelected = 1) {
+            if (mode === 'single') {
+                // Quitar la selección de los hermanos y dársela al clicado
+                const siblings = cardElement.parentElement.children;
+                for (let card of siblings) {
+                    card.classList.remove('selected');
+                }
+                cardElement.classList.add('selected');
+            } else if (mode === 'multiple') {
+                // Permitir selección múltiple con límite
+                if (cardElement.classList.contains('selected')) {
+                    cardElement.classList.remove('selected');
+                } else {
+                    const currentSelected = cardElement.parentElement.querySelectorAll('.selected').length;
+                    if (currentSelected < maxSelected) {
+                        cardElement.classList.add('selected');
+                    }
+                }
+            }
+        }
+
+        function updateSlider(val) {
+            document.getElementById('slider-val').innerText = val + (val == 1 ? ' Day' : ' Days');
+        }
+
+        function generatePlan() {
+            // Ocultar footer y mostrar pantalla de carga
+            document.getElementById('persistent-footer').style.display = 'none';
+            document.querySelectorAll('.step-screen').forEach(el => el.classList.remove('active'));
+            
+            const loadingScreen = document.getElementById('loading-screen');
+            loadingScreen.classList.add('active');
+
+            // Simular tiempo de carga con mensajes dinámicos
+            setTimeout(() => {
+                document.getElementById('loading-text').innerText = 'Analyzing guard passing metrics...';
+            }, 1200);
+
+            setTimeout(() => {
+                loadingScreen.classList.remove('active');
+                document.getElementById('result-screen').classList.add('active');
+            }, 2500);
+        }
+
+        function resetWizard() {
+            currentStep = 1;
+            showStep(currentStep);
+        }
+
+        // Inicializar
+        showStep(currentStep);
+    </script>
 </body>
 </html>
