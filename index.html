@@ -3,19 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EJJ TAP APP 🐘 - Game Plan Generator</title>
+    <title>EJJ TAP APP 🐘 - Game Plan Generator HUD</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0c10;
-            --card-bg: #15171e;
-            --card-border: #222632;
-            --accent-color: #e5c158;
-            --accent-glow: rgba(229, 193, 88, 0.2);
-            --text-main: #ffffff;
-            --text-muted: #8c92a4;
+            --bg-color: #050505;
+            --card-bg: #0c0d10;
+            --card-border: rgba(255, 158, 0, 0.35);
+            --card-border-dim: #1a1e26;
+            --accent-amber: #ff9e00;
+            --accent-amber-bright: #ffb703;
+            --accent-glow: rgba(255, 158, 0, 0.35);
+            --accent-muted: rgba(255, 158, 0, 0.08);
+            --neon-green: #39ff14;
+            --neon-green-glow: rgba(57, 255, 20, 0.3);
+            --text-main: #ff9e00;
+            --text-bright: #ffffff;
+            --text-muted: #808b9e;
+            --font-display: 'Chakra Petch', sans-serif;
+            --font-hud: 'Share Tech Mono', monospace;
+            --font-code: 'JetBrains Mono', monospace;
         }
 
         * {
@@ -27,62 +36,124 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-hud);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 30px 20px;
+            padding: 20px 16px;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(255, 158, 0, 0.08) 0%, transparent 75%),
+                linear-gradient(to bottom, rgba(255, 158, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to right, rgba(255, 158, 0, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 20px 20px, 20px 20px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 820px;
             width: 100%;
             margin: 0 auto;
         }
 
-        h1, h2, h3, h4, .step-title, .btn {
-            font-family: 'Chakra Petch', sans-serif;
+        h1, h2, h3, h4, .step-title, .btn, .badge {
+            font-family: var(--font-display);
             text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* BARRA SUPERIOR Y CABECERA HUD */
+        .hud-top-tag {
+            font-size: 0.8rem;
+            color: var(--accent-amber);
+            letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-family: var(--font-hud);
+        }
+
+        .hud-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-amber);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-amber);
+            display: inline-block;
         }
 
         .header-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            justify-content: space-between;
+            border: 1px solid var(--card-border);
+            background: rgba(12, 13, 16, 0.8);
+            padding: 14px 20px;
+            margin-bottom: 24px;
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
         }
 
+        .header-brand::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-amber), transparent);
+        }
+
+        .header-brand .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-amber-bright);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .header-brand .version {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border: 1px solid var(--card-border-dim);
+            padding: 4px 10px;
+            letter-spacing: 2px;
+            background: #000;
+        }
+
+        /* PASO DEL WIZARD */
         .step-header {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--accent-amber);
+            padding-left: 14px;
         }
 
         .step-indicator {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            letter-spacing: 2px;
-            margin-bottom: 8px;
+            font-size: 0.75rem;
+            color: var(--accent-amber);
+            letter-spacing: 3px;
+            margin-bottom: 4px;
+            font-family: var(--font-hud);
         }
 
         .step-title {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
+            color: var(--text-bright);
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
         }
 
         .step-subtitle {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
+            margin-top: 4px;
+            font-family: var(--font-hud);
         }
 
         .step-screen {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.25s ease-out;
         }
 
         .step-screen.active {
@@ -90,176 +161,278 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* CONTENEDOR TÁCTICO BORDES BISELADOS */
+        .hud-frame {
+            border: 1px solid var(--card-border-dim);
+            background: var(--card-bg);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+            transition: all 0.2s ease;
+        }
+
+        .hud-frame::after {
+            content: "";
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid var(--accent-amber);
+            border-bottom: 2px solid var(--accent-amber);
+        }
+
+        /* GRID DE TARJETAS TÁCTICAS */
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
         }
 
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 20px;
+        .card-hud {
+            background: #08090c;
+            border: 1px solid rgba(255, 158, 0, 0.2);
+            padding: 16px;
             cursor: pointer;
-            transition: all 0.2s ease;
             position: relative;
+            transition: all 0.2s ease;
+            user-select: none;
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
         }
 
-        .card:hover {
-            border-color: var(--text-muted);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+        .card-hud:hover {
+            border-color: var(--accent-amber);
+            background: rgba(255, 158, 0, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 158, 0, 0.15);
         }
 
-        .card.selected {
-            border-color: var(--accent-color);
-            background-color: #181b24;
-            box-shadow: 0 0 15px var(--accent-glow);
+        .card-hud.selected {
+            border-color: var(--accent-amber-bright);
+            background: rgba(255, 158, 0, 0.12);
+            box-shadow: 0 0 18px var(--accent-glow);
         }
 
-        .card.selected::after {
-            content: "✓";
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            color: var(--accent-color);
-            font-weight: bold;
+        .card-hud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
-        .card-title {
-            font-size: 1.1rem;
+        .card-hud-title {
+            font-size: 1.05rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            color: var(--accent-amber-bright);
+            font-family: var(--font-display);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .card-desc {
+        .card-hud-desc {
             font-size: 0.8rem;
             color: var(--text-muted);
             line-height: 1.4;
+            font-family: var(--font-hud);
         }
 
-        .slider-container {
-            background-color: var(--card-bg);
+        /* ICONOS DE ESTADO Y SEGMENTOS DE BARRAS */
+        .status-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: transparent;
+            transition: all 0.2s;
+        }
+
+        .card-hud.selected .status-circle {
+            border-color: var(--neon-green);
+            background: rgba(57, 255, 20, 0.15);
+            color: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green-glow);
+        }
+
+        .segment-bar {
+            display: flex;
+            gap: 3px;
+            margin-top: 10px;
+        }
+
+        .segment {
+            height: 6px;
+            flex: 1;
+            background: #181c24;
+            border-radius: 1px;
+        }
+
+        .segment.active {
+            background: var(--accent-amber);
+            box-shadow: 0 0 6px var(--accent-glow);
+        }
+
+        /* RANGE SLIDER HUD */
+        .slider-hud-container {
+            background: #08090c;
             border: 1px solid var(--card-border);
-            padding: 30px;
-            margin-bottom: 30px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
         }
 
-        .slider-header {
+        .slider-hud-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            margin-bottom: 16px;
+            font-family: var(--font-display);
         }
 
-        .slider-value {
-            color: var(--accent-color);
-            font-size: 1.6rem;
+        .slider-val-box {
+            font-size: 1.8rem;
             font-weight: bold;
-            font-family: 'Chakra Petch', sans-serif;
+            color: var(--accent-amber-bright);
+            text-shadow: 0 0 10px var(--accent-glow);
         }
 
         input[type="range"] {
             width: 100%;
-            accent-color: var(--accent-color);
-            background: var(--card-border);
-            height: 6px;
+            accent-color: var(--accent-amber);
+            background: #181c24;
+            height: 10px;
+            outline: none;
             cursor: pointer;
         }
 
+        /* BOTONES HUD */
         .nav-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid var(--card-border);
-            padding-top: 20px;
-            margin-top: 20px;
+            border-top: 1px solid var(--card-border-dim);
+            padding-top: 18px;
+            margin-top: 12px;
         }
 
         .btn {
             background: transparent;
             border: 1px solid var(--card-border);
             color: var(--text-main);
-            padding: 12px 28px;
-            font-size: 0.9rem;
+            padding: 12px 24px;
+            font-size: 0.85rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
             letter-spacing: 2px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
         }
 
         .btn:hover {
-            border-color: var(--text-main);
+            border-color: var(--accent-amber-bright);
+            background: rgba(255, 158, 0, 0.1);
+            color: var(--accent-amber-bright);
+            box-shadow: 0 0 12px var(--accent-glow);
         }
 
         .btn-primary {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
+            background: var(--accent-amber);
+            color: #000;
+            border: none;
+            font-weight: 800;
         }
 
         .btn-primary:hover {
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            box-shadow: 0 0 15px var(--accent-glow);
+            background: var(--accent-amber-bright);
+            color: #000;
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
         .btn-full {
             width: 100%;
-            text-align: center;
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            font-weight: bold;
-            border: none;
             padding: 16px;
             font-size: 1rem;
         }
 
-        .btn-full:hover {
-            opacity: 0.9;
-        }
-
+        /* SCREEN CARGA HUD */
         #loading-screen {
             text-align: center;
-            padding: 80px 0;
+            padding: 60px 0;
         }
 
-        .result-box {
-            background-color: var(--card-bg);
+        .hud-scanner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--card-border-dim);
+            border-top-color: var(--accent-amber);
+            border-bottom-color: var(--neon-green);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 24px auto;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* RESULTADOS Y CANVAS */
+        .result-hud-box {
+            background: #08090c;
             border: 1px solid var(--card-border);
-            padding: 25px;
-            margin-bottom: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
         }
 
-        .result-box h3 {
-            color: var(--accent-color);
-            font-size: 1rem;
+        .result-hud-box h3 {
+            color: var(--accent-amber-bright);
+            font-size: 0.95rem;
             margin-bottom: 12px;
-            border-bottom: 1px solid var(--card-border);
+            border-bottom: 1px dashed var(--card-border-dim);
             padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .result-box p, .result-box li {
+        .result-hud-box p, .result-hud-box li {
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: #d1d5db;
             line-height: 1.6;
+            font-family: var(--font-hud);
         }
 
-        .result-box ul {
+        .result-hud-box ul {
             list-style: none;
         }
 
-        .result-box li {
+        .result-hud-box li {
             margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
         }
 
-        /* Radar Chart Wrapper */
+        .result-hud-box li span.arrow {
+            color: var(--accent-amber);
+            font-weight: bold;
+        }
+
         .chart-wrapper {
             display: flex;
             justify-content: center;
@@ -274,167 +447,225 @@
 
         .badge-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
         }
 
         .badge {
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 4px 10px;
-            font-size: 0.75rem;
+            border: 1px solid var(--accent-amber);
+            color: var(--accent-amber-bright);
+            background: var(--accent-muted);
+            padding: 3px 10px;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
         }
 
-        .download-btn-container {
-            margin-top: 15px;
-            margin-bottom: 20px;
+        @media (max-width: 600px) {
+            .step-title { font-size: 1.4rem; }
+            .options-grid { grid-template-columns: 1fr; }
+            body { padding: 12px 10px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- CABECERA TÁCTICA HUD -->
+        <div class="hud-top-tag">
+            <span class="hud-dot"></span> 01_GAME_PLAN_GENERATOR // SYS_ACTIVE
+        </div>
         <div class="header-brand">
-            <span>EJJ TAP APP</span> 🐘
+            <div class="logo">
+                <span>EJJ TAP APP</span> 🐘
+            </div>
+            <div class="version">V2.4 HUD_INTERFACE</div>
         </div>
 
-        <!-- PASO 1: Estilo -->
+        <!-- PASO 1: ESTILO -->
         <div class="step-screen active" id="step-1">
             <div class="step-header">
-                <div class="step-indicator">STEP 01 — IDENTITY</div>
-                <h2 class="step-title">YOUR NATURAL STYLE</h2>
-                <p class="step-subtitle">Your game plan should fit you — not a YouTube highlight reel.</p>
-            </div>
-            <div class="options-grid">
-                <div class="card selected" onclick="selectCard(this, 'single')" data-style="Top Pressure Player">
-                    <div class="card-title">💪 TOP PRESSURE PLAYER</div>
-                    <div class="card-desc">Strong, heavy. Grind top position and flatten guard players.</div>
-                </div>
-                <div class="card" onclick="selectCard(this, 'single')" data-style="Guard Player">
-                    <div class="card-title">🕷️ GUARD PLAYER</div>
-                    <div class="card-desc">Technical, flexible. Comfortable off your back.</div>
-                </div>
-                <div class="card" onclick="selectCard(this, 'single')" data-style="Submission Hunter">
-                    <div class="card-title">⚡ SUBMISSION HUNTER</div>
-                    <div class="card-desc">Aggressive, mobile. Chasing the tap everywhere.</div>
-                </div>
-                <div class="card" onclick="selectCard(this, 'single')" data-style="Leglock Hunter">
-                    <div class="card-title">🦵 LEGLOCK HUNTER</div>
-                    <div class="card-desc">The dark arts. Lower body is your main weapon.</div>
-                </div>
-                <div class="card" onclick="selectCard(this, 'single')" data-style="Takedown Master">
-                    <div class="card-title">🤼 TAKEDOWN MASTER</div>
-                    <div class="card-desc">Wrestling first. Dictate where the fight happens.</div>
-                </div>
-                <div class="card" onclick="selectCard(this, 'single')" data-style="Chess Player">
-                    <div class="card-title">♟️ CHESS PLAYER</div>
-                    <div class="card-desc">Methodical. Control, score, minimise risk.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PASO 2: Debilidades -->
-        <div class="step-screen" id="step-2">
-            <div class="step-header">
-                <div class="step-indicator">STEP 02 — ASSESSMENT</div>
-                <h2 class="step-title">BIGGEST WEAKNESS</h2>
-                <p class="step-subtitle">A real game plan attacks your gaps. Select up to 2.</p>
-            </div>
-            <div class="options-grid">
-                <div class="card" onclick="selectCard(this, 'multiple', 2)" data-weak="Escapes">
-                    <div class="card-title">ESCAPES</div>
-                    <div class="card-desc">Getting stuck under side control, mount, or back.</div>
-                </div>
-                <div class="card" onclick="selectCard(this, 'multiple', 2)" data-weak="Guard Passing">
-                    <div class="card-title">GUARD PASSING</div>
-                    <div class="card-desc">Can't get past the legs consistently.</div>
-                </div>
-                <div class="card" onclick="selectCard(this, 'multiple', 2)" data-weak="Finishing">
-                    <div class="card-title">FINISHING</div>
-                    <div class="card-desc">Dominant positions but can't close it out.</div>
-                </div>
-                <div class="card" onclick="selectCard(this, 'multiple', 2)" data-weak="Cardio">
-                    <div class="card-title">CARDIO / PACING</div>
-                    <div class="card-desc">Gassing out mid-roll and losing position.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PASO 3: Días de entrenamiento -->
-        <div class="step-screen" id="step-3">
-            <div class="step-header">
-                <div class="step-indicator">STEP 03 — FINAL DETAILS</div>
-                <h2 class="step-title">TRAINING & GOAL</h2>
-                <p class="step-subtitle">Calibrate your schedule and primary objective.</p>
+                <div class="step-indicator">[ PHASE 01 ] // TACTICAL IDENTITY</div>
+                <h2 class="step-title">SELECT NATURAL STYLE</h2>
+                <p class="step-subtitle">Calibrate core combat profile for high-efficiency game plan.</p>
             </div>
             
-            <div class="slider-container">
-                <div class="slider-header">
-                    <span>DAYS TRAINING PER WEEK</span>
-                    <span class="slider-value" id="slider-val">3 DAYS</span>
+            <div class="options-grid">
+                <div class="card-hud selected" onclick="selectCard(this, 'single')" data-style="Top Pressure Player">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">💪 TOP PRESSURE</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Grind top position, heavy shoulder control, flatten guard.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment active"></div><div class="segment active"></div><div class="segment"></div></div>
+                </div>
+
+                <div class="card-hud" onclick="selectCard(this, 'single')" data-style="Guard Player">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">🕷️ GUARD PLAYER</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Technical, flexible. Off-balancing sweeps & guard entanglements.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment active"></div><div class="segment"></div><div class="segment"></div></div>
+                </div>
+
+                <div class="card-hud" onclick="selectCard(this, 'single')" data-style="Submission Hunter">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">⚡ SUB HUNTER</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Aggressive scrambler. Continuous submission chain links.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment active"></div><div class="segment active"></div><div class="segment active"></div></div>
+                </div>
+
+                <div class="card-hud" onclick="selectCard(this, 'single')" data-style="Leglock Hunter">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">🦵 LEGLOCK HUNTER</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Lower body isolation matrix. Ashi garami entries & heel hooks.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment active"></div><div class="segment active"></div><div class="segment"></div></div>
+                </div>
+
+                <div class="card-hud" onclick="selectCard(this, 'single')" data-style="Takedown Master">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">🤼 TAKEDOWN MASTER</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Wrestling & takedown dominance. Direct standing control.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment active"></div><div class="segment"></div><div class="segment"></div></div>
+                </div>
+
+                <div class="card-hud" onclick="selectCard(this, 'single')" data-style="Chess Player">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">♟️ CHESS PLAYER</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Methodical point control. Low risk, high tactical precision.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment"></div><div class="segment"></div><div class="segment"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASO 2: DEBILIDADES -->
+        <div class="step-screen" id="step-2">
+            <div class="step-header">
+                <div class="step-indicator">[ PHASE 02 ] // SYSTEM WEAKNESS ASSESSMENT</div>
+                <h2 class="step-title">TARGET WEAKNESSES</h2>
+                <p class="step-subtitle">Identify up to 2 critical gaps in your tactical matrix.</p>
+            </div>
+            
+            <div class="options-grid">
+                <div class="card-hud" onclick="selectCard(this, 'multiple', 2)" data-weak="Escapes">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">01. ESCAPES</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Stuck under side control, mount, or back control pins.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment active"></div><div class="segment"></div></div>
+                </div>
+
+                <div class="card-hud" onclick="selectCard(this, 'multiple', 2)" data-weak="Guard Passing">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">02. GUARD PASSING</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Difficulty clearing leg barriers and getting top control.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment active"></div><div class="segment"></div></div>
+                </div>
+
+                <div class="card-hud" onclick="selectCard(this, 'multiple', 2)" data-weak="Finishing">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">03. FINISHING</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Reaching dominant positions without securing the tap.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment active"></div><div class="segment"></div></div>
+                </div>
+
+                <div class="card-hud" onclick="selectCard(this, 'multiple', 2)" data-weak="Cardio">
+                    <div class="card-hud-header">
+                        <div class="card-hud-title">04. CARDIO / PACING</div>
+                        <div class="status-circle">✓</div>
+                    </div>
+                    <div class="card-hud-desc">Gas tank exhaustion mid-roll causing positional collapse.</div>
+                    <div class="segment-bar"><div class="segment active"></div><div class="segment active"></div><div class="segment"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASO 3: CALIBRACIÓN Y DÍAS -->
+        <div class="step-screen" id="step-3">
+            <div class="step-header">
+                <div class="step-indicator">[ PHASE 03 ] // FREQUENCY & CALIBRATION</div>
+                <h2 class="step-title">TRAINING SCHEDULE</h2>
+                <p class="step-subtitle">Configure weekly sessions for workload calculation.</p>
+            </div>
+
+            <div class="slider-hud-container">
+                <div class="slider-hud-header">
+                    <span>WEEKLY SESSIONS FREQUENCY</span>
+                    <span class="slider-val-box" id="slider-val">3 DAYS / WEEK</span>
                 </div>
                 <input type="range" id="days-slider" min="1" max="6" value="3" oninput="updateSlider(this.value)">
             </div>
 
-            <button class="btn btn-full" onclick="generatePlan()">GENERATE MY GAME PLAN</button>
+            <button class="btn btn-primary btn-full" onclick="generatePlan()">[ INITIALIZE GAME PLAN ]</button>
         </div>
 
-        <!-- PANTALLA DE CARGA -->
+        <!-- SCREEN DE CARGA -->
         <div class="step-screen" id="loading-screen">
-            <h2 class="step-title">BUILDING YOUR GAME PLAN</h2>
-            <p class="step-subtitle" id="loading-text" style="margin-top: 15px;">Calculating weak points and efficiency matrix...</p>
+            <div class="hud-scanner"></div>
+            <h2 class="step-title" style="text-align: center;">COMPUTING COMBAT MATRIX</h2>
+            <p class="step-subtitle" id="loading-text" style="text-align: center; margin-top: 10px;">Calibrating radar pentagon efficiency metrics...</p>
         </div>
 
-        <!-- PANTALLA DE RESULTADOS -->
+        <!-- SCREEN DE RESULTADOS -->
         <div class="step-screen" id="result-screen">
             <div id="export-container">
                 <div class="step-header">
                     <div class="badge-container">
-                        <div class="badge">EJJ TAP APP 🐘</div>
+                        <div class="badge">● EJJ TAP APP</div>
                         <div class="badge" id="badge-style">TOP PRESSURE</div>
                     </div>
-                    <h2 class="step-title" id="result-main-title">GAME PLAN DETAILS</h2>
+                    <h2 class="step-title" id="result-main-title">TACTICAL GAME PLAN</h2>
                 </div>
 
-                <!-- Gráfico Pentagonal Canvas -->
-                <div class="result-box">
-                    <h3>EFFICACY RADAR (5-POINT MATRIX)</h3>
+                <!-- RADAR PENTAGONAL -->
+                <div class="result-hud-box">
+                    <h3>⚡ EFFICACY RADAR MATRIX</h3>
                     <div class="chart-wrapper">
                         <canvas id="radarCanvas" width="400" height="380"></canvas>
                     </div>
                 </div>
 
-                <div class="result-box">
-                    <h3>GAME PLAN IDENTITY</h3>
+                <div class="result-hud-box">
+                    <h3>🎯 STYLE CORE PROFILE</h3>
                     <p id="result-identity-desc">You are a heavy top player who crushes the opponent's resolve.</p>
                 </div>
 
-                <div class="result-box">
-                    <h3>PRIMARY ATTACK SEQUENCE</h3>
+                <div class="result-hud-box">
+                    <h3>⚔️ PRIMARY ATTACK SEQUENCE</h3>
                     <ul id="result-attacks">
-                        <li>→ 1. Knee slice pass to cross-side control</li>
-                        <li>→ 2. Heavy shoulder pressure to force reactions</li>
-                        <li>→ 3. Transition to mount or back control</li>
+                        <li><span class="arrow">[1]</span> Knee slice pass to cross-side control</li>
+                        <li><span class="arrow">[2]</span> Heavy shoulder pressure to force panic reaction</li>
+                        <li><span class="arrow">[3]</span> Transition to mount or back control</li>
                     </ul>
                 </div>
 
-                <div class="result-box">
-                    <h3>AREAS TO IMPROVE & 30-DAY FOCUS</h3>
+                <div class="result-hud-box">
+                    <h3>🛠️ 30-DAY DRILL DRIFT FIX</h3>
                     <p id="result-weakness-fix">Work on escaping pins and drilling 10 minutes of guard passing every session.</p>
                 </div>
             </div>
 
-            <div class="download-btn-container">
-                <button class="btn btn-full" onclick="downloadJPG()">📸 DOWNLOAD GAME PLAN (.JPG)</button>
-            </div>
-
-            <button class="btn" style="width: 100%; margin-top: 10px;" onclick="resetWizard()">← START OVER</button>
+            <button class="btn btn-primary btn-full" style="margin-top: 16px;" onclick="downloadJPG()">📸 EXPORT GAME PLAN (.JPG)</button>
+            <button class="btn" style="width: 100%; margin-top: 10px;" onclick="resetWizard()">← RE-CALIBRATE WIZARD</button>
         </div>
 
     </div>
 
-    <!-- Navegación inferior -->
+    <!-- NAVEGACIÓN INFERIOR -->
     <div class="container" id="persistent-footer">
         <div class="nav-footer">
             <button class="btn" id="prev-btn" onclick="changeStep(-1)">← BACK</button>
@@ -454,12 +685,12 @@
             
             if (step <= totalSteps) {
                 document.getElementById(`step-${step}`).classList.add('active');
-                document.getElementById('persistent-footer').style.display = 'flex';
+                document.getElementById('persistent-footer').style.display = 'block';
             } else {
                 document.getElementById('persistent-footer').style.display = 'none';
             }
 
-            document.getElementById('prev-btn').style.display = (step === 1) ? 'none' : 'block';
+            document.getElementById('prev-btn').style.display = (step === 1) ? 'none' : 'inline-flex';
         }
 
         function changeStep(direction) {
@@ -493,7 +724,7 @@
 
         function updateSlider(val) {
             trainingDays = val;
-            document.getElementById('slider-val').innerText = val + (val == 1 ? ' DAY' : ' DAYS');
+            document.getElementById('slider-val').innerText = val + (val == 1 ? ' DAY / WEEK' : ' DAYS / WEEK');
         }
 
         function generatePlan() {
@@ -504,15 +735,15 @@
             loadingScreen.classList.add('active');
 
             setTimeout(() => {
-                document.getElementById('loading-text').innerText = 'Generating Pentagonal Efficiency Radar...';
-            }, 1000);
+                document.getElementById('loading-text').innerText = 'Generating tactical radar matrix values...';
+            }, 800);
 
             setTimeout(() => {
                 loadingScreen.classList.remove('active');
                 document.getElementById('result-screen').classList.add('active');
                 updateResultContent();
                 drawRadarChart();
-            }, 2200);
+            }, 1800);
         }
 
         function updateResultContent() {
@@ -524,70 +755,69 @@
             const fixEl = document.getElementById('result-weakness-fix');
 
             if (selectedStyleName === 'Top Pressure Player') {
-                descEl.innerText = "You are a heavy top player who crushes the opponent's resolve. Build your game around passing cleanly, staying heavy, and forcing panic reactions.";
+                descEl.innerText = "Heavy top pressure archetype. Crush opponent guard flexibility, force panic frames, and isolate pins.";
                 attacksEl.innerHTML = `
-                    <li>→ 1. Knee slice pass to cross-side control</li>
-                    <li>→ 2. Heavy shoulder-of-justice pressure</li>
-                    <li>→ 3. Transition to mount or back take</li>
+                    <li><span class="arrow">[1]</span> Knee slice pass to cross-side heavy chest pin</li>
+                    <li><span class="arrow">[2]</span> Shoulder-of-justice pressure forcing hip turn</li>
+                    <li><span class="arrow">[3]</span> Smooth transition to mount or back trap</li>
                 `;
             } else if (selectedStyleName === 'Guard Player') {
-                descEl.innerText = "Technical and adaptable off your back. You dictate the pace using sweeps, off-balancing, and dangerous guard entanglements.";
+                descEl.innerText = "Technical guard orchestrator. Dictate match distance using sweeps, off-balancing angles, and leg entanglements.";
                 attacksEl.innerHTML = `
-                    <li>→ 1. De La Riva off-balancing to sweep</li>
-                    <li>→ 2. Single Leg X-Guard elevation</li>
-                    <li>→ 3. Back take transition or direct submission</li>
+                    <li><span class="arrow">[1]</span> De La Riva off-balance force to sweep</li>
+                    <li><span class="arrow">[2]</span> Single Leg X elevation and guard recovery</li>
+                    <li><span class="arrow">[3]</span> Back take transition or direct submission submission</li>
                 `;
             } else if (selectedStyleName === 'Submission Hunter') {
-                descEl.innerText = "Relentless attack machine. You convert scrambles into high-percentage submission attempts from anywhere.";
+                descEl.innerText = "Aggressive submission machine. Capitalize on scramble gaps to link continuous tap threats.";
                 attacksEl.innerHTML = `
-                    <li>→ 1. Snap down to front headlock choke</li>
-                    <li>→ 2. Arm drag sequence to back control</li>
-                    <li>→ 3. Continuous triangle / armbar submission chains</li>
+                    <li><span class="arrow">[1]</span> Snap down heavy control to front headlock choke</li>
+                    <li><span class="arrow">[2]</span> Arm drag scramble directly to back hooks</li>
+                    <li><span class="arrow">[3]</span> Triangle / Armbar high-velocity chain</li>
                 `;
             } else if (selectedStyleName === 'Leglock Hunter') {
-                descEl.innerText = "Master of the lower body matrix. You isolate legs from open positions and force quick taps with high precision.";
+                descEl.innerText = "Lower body specialist. Isolate leg attacks from open guard and secure high-precision heel hooks.";
                 attacksEl.innerHTML = `
-                    <li>→ 1. Outside Ashi Garami entry from open guard</li>
-                    <li>→ 2. Dig heel hook or knee bar setup</li>
-                    <li>→ 3. Hip-line pin to prevent defense escapes</li>
+                    <li><span class="arrow">[1]</span> Outside Ashi Garami entry from open guard</li>
+                    <li><span class="arrow">[2]</span> Heel hook dig or kneebar leverage lock</li>
+                    <li><span class="arrow">[3]</span> Hip-line pinning to neutralize escape attempts</li>
                 `;
             } else if (selectedStyleName === 'Takedown Master') {
-                descEl.innerText = "Dominant standing control. You decide where the match happens and punish opponents with wrestling authority.";
+                descEl.innerText = "Standing control authority. Dictate match location with wrestling takedown dominance.";
                 attacksEl.innerHTML = `
-                    <li>→ 1. High-crotch single leg to double leg finish</li>
-                    <li>→ 2. Heavy collar tie and snap down</li>
-                    <li>→ 3. Immediate pin and top position stabilization</li>
+                    <li><span class="arrow">[1]</span> High-crotch single leg to double leg drive</li>
+                    <li><span class="arrow">[2]</span> Heavy collar tie and snap down</li>
+                    <li><span class="arrow">[3]</span> Pin stabilization and instant top control</li>
                 `;
             } else {
-                descEl.innerText = "Tactical mind. You minimize risk, accumulate points cleanly, and capitalize on opponent fatigue.";
+                descEl.innerText = "Strategic mind. Low-risk positioning, point accumulation, and capitalizing on opponent fatigue.";
                 attacksEl.innerHTML = `
-                    <li>→ 1. Methodical grip fighting and posture control</li>
-                    <li>→ 2. Low-risk sweep score</li>
-                    <li>→ 3. Positional control to drain opponent clock</li>
+                    <li><span class="arrow">[1]</span> Methodical grip fighting and posture neutralization</li>
+                    <li><span class="arrow">[2]</span> Low-risk sweep scoring sequence</li>
+                    <li><span class="arrow">[3]</span> Positional dominance draining match clock</li>
                 `;
             }
 
-            let weakText = selectedWeaknesses.length > 0 ? selectedWeaknesses.join(" & ") : "General consistency";
-            fixEl.innerText = `Focus Area (${weakText}): Drill 10–15 minutes of specific positional escapes and recovery scenarios every training session (${trainingDays}x per week).`;
+            let weakText = selectedWeaknesses.length > 0 ? selectedWeaknesses.join(" & ") : "GENERAL DRILLING";
+            fixEl.innerText = `PRIORITY DRILL (${weakText}): Dedicate 15 minutes of positional escape drills every session (${trainingDays}x/week).`;
         }
 
-        // DIBUJAR PENTÁGONO / RADAR CHART EN CANVAS
+        // CANVAS RADAR ESTILO HUD AMBAR / NEON
         function drawRadarChart() {
             const canvas = document.getElementById('radarCanvas');
             const ctx = canvas.getContext('2d');
             const width = canvas.width;
             const height = canvas.height;
             const centerX = width / 2;
-            const centerY = height / 2 + 10;
+            const centerY = height / 2 + 8;
             const radius = 120;
 
             ctx.clearRect(0, 0, width, height);
 
-            const labels = ['TAKEDOWNS', 'LEGLOCKS', 'PASAJES', 'GUARDIA', 'SUBMISSIONS'];
+            const labels = ['TAKEDOWNS', 'LEGLOCKS', 'PASSING', 'GUARD', 'SUBMISSIONS'];
             
-            // Valores por omisión según el estilo elegido (escortados de 0 a 100)
             let values = [60, 50, 70, 60, 65];
-            if (selectedStyleName === 'Top Pressure Player') values = [70, 45, 95, 50, 65];
+            if (selectedStyleName === 'Top Pressure Player') values = [75, 45, 95, 50, 65];
             else if (selectedStyleName === 'Guard Player') values = [40, 65, 50, 95, 75];
             else if (selectedStyleName === 'Submission Hunter') values = [60, 75, 65, 70, 95];
             else if (selectedStyleName === 'Leglock Hunter') values = [50, 98, 55, 75, 85];
@@ -596,15 +826,15 @@
 
             const numSides = 5;
             const angleStep = (Math.PI * 2) / numSides;
-            const startAngle = -Math.PI / 2; // Empezar arriba
+            const startAngle = -Math.PI / 2;
 
-            // Dibujar rejilla pentagonal (3 capas)
-            ctx.strokeStyle = '#222632';
-            ctx.lineWidth = 1;
-
+            // REJILLA Y EJES TÁCTICOS
             for (let level = 1; level <= 3; level++) {
                 const levelRadius = (radius / 3) * level;
                 ctx.beginPath();
+                ctx.strokeStyle = level === 3 ? 'rgba(255, 158, 0, 0.4)' : '#1a1e26';
+                ctx.lineWidth = 1;
+
                 for (let i = 0; i < numSides; i++) {
                     const angle = startAngle + i * angleStep;
                     const x = centerX + levelRadius * Math.cos(angle);
@@ -616,9 +846,9 @@
                 ctx.stroke();
             }
 
-            // Dibujar ejes y etiquetas
-            ctx.fillStyle = '#8c92a4';
-            ctx.font = '700 11px "Chakra Petch", sans-serif';
+            // ETIQUETAS HUD
+            ctx.fillStyle = '#ff9e00';
+            ctx.font = 'bold 11px "Share Tech Mono", monospace';
             ctx.textAlign = 'center';
 
             for (let i = 0; i < numSides; i++) {
@@ -626,19 +856,18 @@
                 const x = centerX + radius * Math.cos(angle);
                 const y = centerY + radius * Math.sin(angle);
 
-                // Eje
                 ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255, 158, 0, 0.2)';
                 ctx.moveTo(centerX, centerY);
                 ctx.lineTo(x, y);
                 ctx.stroke();
 
-                // Etiqueta
                 const labelX = centerX + (radius + 28) * Math.cos(angle);
-                const labelY = centerY + (radius + 20) * Math.sin(angle);
+                const labelY = centerY + (radius + 18) * Math.sin(angle);
                 ctx.fillText(labels[i], labelX, labelY);
             }
 
-            // Dibujar Área de Datos
+            // ÁREA DE RENDIMIENTO ÁMBAR GLOW
             ctx.beginPath();
             for (let i = 0; i < numSides; i++) {
                 const angle = startAngle + i * angleStep;
@@ -651,13 +880,13 @@
             }
             ctx.closePath();
 
-            ctx.fillStyle = 'rgba(229, 193, 88, 0.35)';
+            ctx.fillStyle = 'rgba(255, 158, 0, 0.25)';
             ctx.fill();
-            ctx.strokeStyle = '#e5c158';
+            ctx.strokeStyle = '#ffb703';
             ctx.lineWidth = 2;
             ctx.stroke();
 
-            // Puntos amarillos
+            // PUNTOS NEÓN
             for (let i = 0; i < numSides; i++) {
                 const angle = startAngle + i * angleStep;
                 const valRadius = (radius * (values[i] / 100));
@@ -666,77 +895,84 @@
 
                 ctx.beginPath();
                 ctx.arc(x, y, 4, 0, Math.PI * 2);
-                ctx.fillStyle = '#e5c158';
+                ctx.fillStyle = '#39ff14';
                 ctx.fill();
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 1;
+                ctx.stroke();
             }
         }
 
-        // GENERAR Y DESCARGAR IMAGEN JPG
+        // DESCARGAR EN JPG ESTILO REFERENCIA HUD
         function downloadJPG() {
-            const container = document.getElementById('export-container');
             const radarCanvas = document.getElementById('radarCanvas');
-
-            // Crear un canvas temporal para renderizar todo como una sola imagen
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             
-            canvas.width = 600;
-            canvas.height = 900;
+            canvas.width = 640;
+            canvas.height = 920;
 
-            // Fondo Oscuro
-            ctx.fillStyle = '#0b0c10';
+            // Fondo Negro Profundo
+            ctx.fillStyle = '#050505';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Borde Dorado
-            ctx.strokeStyle = '#e5c158';
-            ctx.lineWidth = 4;
-            ctx.strokeRect(15, 15, canvas.width - 30, canvas.height - 30);
+            // Borde Táctico Ámbar
+            ctx.strokeStyle = '#ff9e00';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(16, 16, canvas.width - 32, canvas.height - 32);
 
-            // Header y Título
-            ctx.fillStyle = '#e5c158';
-            ctx.font = 'bold 22px "Chakra Petch", sans-serif';
-            ctx.fillText('EJJ TAP APP 🐘', 40, 60);
+            // Detalles de Esquinas Tácticas HUD
+            ctx.fillStyle = '#ff9e00';
+            ctx.fillRect(10, 10, 16, 4);
+            ctx.fillRect(10, 10, 4, 16);
+            ctx.fillRect(canvas.width - 26, 10, 16, 4);
+            ctx.fillRect(canvas.width - 14, 10, 4, 16);
+
+            // Encabezado
+            ctx.fillStyle = '#ff9e00';
+            ctx.font = 'bold 14px "Share Tech Mono", monospace';
+            ctx.fillText('● 01_GAME_PLAN_GENERATOR // EJJ TAP APP', 40, 55);
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 26px "Chakra Petch", sans-serif';
-            ctx.fillText(selectedStyleName.toUpperCase() + ' PLAN', 40, 100);
+            ctx.font = 'bold 28px "Chakra Petch", sans-serif';
+            ctx.fillText(selectedStyleName.toUpperCase() + ' PLAN', 40, 95);
 
-            ctx.fillStyle = '#8c92a4';
-            ctx.font = '14px "JetBrains Mono", monospace';
-            ctx.fillText(`Training: ${trainingDays} Days/Week | Weaknesses: ${selectedWeaknesses.join(', ') || 'None'}`, 40, 130);
+            ctx.fillStyle = '#808b9e';
+            ctx.font = '13px "Share Tech Mono", monospace';
+            ctx.fillText(`SCHEDULE: ${trainingDays} DAYS/WK | TARGET: ${selectedWeaknesses.join(', ') || 'BALANCED'}`, 40, 125);
 
-            // Dibujar Gráfico Radar en el Canvas de Imagen
-            ctx.drawImage(radarCanvas, 100, 150, 400, 380);
+            // Renderizar Radar Canvas
+            ctx.drawImage(radarCanvas, 120, 150, 400, 380);
 
-            // Secciones de Texto
-            ctx.fillStyle = '#e5c158';
+            // Módulo Secuencia Ataque
+            ctx.fillStyle = '#ff9e00';
             ctx.font = 'bold 16px "Chakra Petch", sans-serif';
-            ctx.fillText('PRIMARY ATTACK SEQUENCE:', 40, 560);
+            ctx.fillText('PRIMARY ATTACK SEQUENCE:', 40, 570);
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = '14px "JetBrains Mono", monospace';
+            ctx.font = '14px "Share Tech Mono", monospace';
             const attacks = document.querySelectorAll('#result-attacks li');
-            let yPos = 590;
+            let yPos = 605;
             attacks.forEach(li => {
                 ctx.fillText(li.innerText, 40, yPos);
                 yPos += 30;
             });
 
-            ctx.fillStyle = '#e5c158';
+            // Módulo Enfoque 30 días
+            ctx.fillStyle = '#ff9e00';
             ctx.font = 'bold 16px "Chakra Petch", sans-serif';
-            ctx.fillText('30-DAY TECHNICAL FOCUS:', 40, 710);
+            ctx.fillText('30-DAY TECHNICAL DRILL FOCUS:', 40, 720);
 
-            ctx.fillStyle = '#8c92a4';
-            ctx.font = '13px "JetBrains Mono", monospace';
+            ctx.fillStyle = '#808b9e';
+            ctx.font = '13px "Share Tech Mono", monospace';
             const fixText = document.getElementById('result-weakness-fix').innerText;
             
-            // Función simple para dividir texto largo en líneas
             const words = fixText.split(' ');
             let line = '';
-            let lineY = 740;
+            let lineY = 750;
             for (let i = 0; i < words.length; i++) {
                 let testLine = line + words[i] + ' ';
-                if (ctx.measureText(testLine).width > 500) {
+                if (ctx.measureText(testLine).width > 540) {
                     ctx.fillText(line, 40, lineY);
                     line = words[i] + ' ';
                     lineY += 22;
@@ -746,9 +982,13 @@
             }
             ctx.fillText(line, 40, lineY);
 
-            // Descargar como JPG
+            // Pie de Imagen
+            ctx.fillStyle = '#39ff14';
+            ctx.font = '12px "Share Tech Mono", monospace';
+            ctx.fillText('EJJ TAP APP // ONE STEP CLOSER EVERYDAY', 40, 860);
+
             const link = document.createElement('a');
-            link.download = `EJJ-GamePlan-${selectedStyleName.replace(/\s+/g, '-')}.jpg`;
+            link.download = `EJJ-HUD-Plan-${selectedStyleName.replace(/\s+/g, '-')}.jpg`;
             link.href = canvas.toDataURL('image/jpeg', 0.95);
             link.click();
         }
