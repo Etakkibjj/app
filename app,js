@@ -1,0 +1,32 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const views = document.querySelectorAll('.view');
+
+    function navigateTo(targetId) {
+        navButtons.forEach(btn => {
+            if (btn.dataset.target === targetId) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        views.forEach(view => {
+            if (view.id === targetId) {
+                view.classList.add('active');
+            } else {
+                view.classList.remove('active');
+            }
+        });
+    }
+
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const target = button.dataset.target;
+            navigateTo(target);
+        });
+    });
+
+    // Exponer globalmente para accesos rápidos
+    window.app = { navigateTo };
+});
