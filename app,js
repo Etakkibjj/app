@@ -1,3 +1,5 @@
+import { globalState } from './state.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const navButtons = document.querySelectorAll('.nav-btn');
     const views = document.querySelectorAll('.view');
@@ -27,6 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Exponer globalmente para accesos rápidos
+    // Mostrar datos reales en el Dashboard si existen
+    updateDashboardStats();
+
+    // Exponer globalmente
     window.app = { navigateTo };
 });
+
+function updateDashboardStats() {
+    const sessionsCount = globalState.sessions.length;
+    // Aquí actualizaremos los contadores visuales del dashboard dinámicamente en las siguientes fases
+    console.log(`Estado cargado correctamente. Sesiones registradas: ${sessionsCount}`);
+}
