@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJJ Grappling Gauntlet</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="manifest" href="./manifest.json">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Barra de Navegación Lateral / Superior -->
+        <header class="app-header">
+            <div class="brand">
+                <span class="brand-badge">EJJ</span>
+                <h1>GRAPPLING GAUNTLET</h1>
+            </div>
+            <nav class="nav-menu" id="navMenu">
+                <button class="nav-btn active" data-target="dashboard">Dashboard</button>
+                <button class="nav-btn" data-target="planner">Planificador</button>
+                <button class="nav-btn" data-target="sessions">Sesiones BJJ</button>
+                <button class="nav-btn" data-target="strength">Fuerza & S&C</button>
+                <button class="nav-btn" data-target="techniques">Biblioteca</button>
+                <button class="nav-btn" data-target="gameplans">Game Plans</button>
+                <button class="nav-btn" data-target="progress">Progreso</button>
+                <button class="nav-btn" data-target="goals">Objetivos</button>
+            </nav>
+        </header>
+
+        <!-- Contenido Dinámico por Módulos -->
+        <main class="app-content" id="appContent">
+            <!-- Vista Dashboard (Por defecto) -->
+            <section id="dashboard" class="view active">
+                <div class="view-header">
+                    <h2>Panel de Control</h2>
+                    <p>Resumen general de tu rendimiento y preparación en grappling.</p>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="card stat-card">
+                        <h3>Próxima Sesión</h3>
+                        <p class="stat-value">No programada</p>
+                        <button class="btn-primary" onclick="app.navigateTo('planner')">Planificar entrenamiento</button>
+                    </div>
+                    <div class="card stat-card">
+                        <h3>Entrenamientos (Semana)</h3>
+                        <p class="stat-value">0</p>
+                        <span class="stat-sub">Objetivo: 4 sesiones</span>
+                    </div>
+                    <div class="card stat-card">
+                        <h3>Distribución Gi / No-Gi</h3>
+                        <div class="radar-placeholder">
+                            <div class="radar-ring"></div>
+                            <span class="radar-text">Sin datos suficientes</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vistas adicionales se cargan dinámicamente -->
+            <section id="planner" class="view">
+                <div class="view-header">
+                    <h2>Planificador de Entrenamiento</h2>
+                    <p>Calendario semanal y mensual de sesiones.</p>
+                </div>
+            </section>
+
+            <section id="sessions" class="view">
+                <div class="view-header">
+                    <h2>Registro de Sesiones BJJ</h2>
+                    <p>Detalle de técnicas, sparring, RPE y observaciones.</p>
+                </div>
+            </section>
+
+            <section id="strength" class="view">
+                <div class="view-header">
+                    <h2>Strength & Conditioning</h2>
+                    <p>Control de cargas, repeticiones y récords personales.</p>
+                </div>
+            </section>
+
+            <section id="techniques" class="view">
+                <div class="view-header">
+                    <h2>Biblioteca Técnica</h2>
+                    <p>Taxonomía y seguimiento de dominio técnico.</p>
+                </div>
+            </section>
+
+            <section id="gameplans" class="view">
+                <div class="view-header">
+                    <h2>Game Plan Builder</h2>
+                    <p>Diseño visual de sistemas tácticos de grappling.</p>
+                </div>
+            </section>
+
+            <section id="progress" class="view">
+                <div class="view-header">
+                    <h2>Progreso y Analítica</h2>
+                    <p>Evolución de rendimiento basada en registros reales.</p>
+                </div>
+            </section>
+
+            <section id="goals" class="view">
+                <div class="view-header">
+                    <h2>Objetivos</h2>
+                    <p>Metas semanales, mensuales y trimestrales.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="./js/app.js"></script>
+</body>
+</html>
