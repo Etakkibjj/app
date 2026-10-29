@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No-Gi Jiu Jitsu Gameplan Builder</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- html2canvas for Image Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#0A1D24',
+              navy: '#132830',
+              accent: '#434AA3',
+              purple: '#5B51D8',
+              beige: '#CDB9B4',
+              softBg: '#F3ECE7',
+              cardBg: '#EDE4DD',
+              inputBg: '#E2D7CF',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F3ECE7;
+      color: #0A1D24;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .curve-bg {
+      background: linear-gradient(135deg, #CDB9B4 0%, #E2D7CF 100%);
+      border-radius: 0 0 2.5rem 2.5rem;
+    }
+
+    .node-card {
+      transition: all 0.2s ease-in-out;
+    }
+    .node-card:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #E2D7CF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #434AA3;
+      border-radius: 4px;
+    }
+
+    /* Tree Canvas Connectors */
+    .tree-connector {
+      stroke: #434AA3;
+      stroke-width: 2.5;
+      stroke-dasharray: 6 4;
+      fill: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col pb-12">
+
+  <!-- TOP HEADER / ATHLETE PROFILE -->
+  <header class="curve-bg pt-8 pb-10 px-6 mb-8 shadow-md relative overflow-hidden">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+      
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 rounded-2xl bg-brand-dark flex items-center justify-center text-white shadow-lg">
+          <i data-lucide="swords" class="w-8 h-8 text-brand-beige"></i>
+        </div>
+        <div>
+          <span class="text-xs font-bold tracking-widest uppercase text-brand-accent">Gameplan Studio</span>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-brand-dark">NO-GI JIU JITSU PLANNER</h1>
+        </div>
+      </div>
+
+      <!-- Athlete Info Inputs -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full md:w-auto">
+        <div class="bg-white/80 backdrop-blur rounded-xl p-3 border border-white/40 shadow-sm">
+          <label class="block text-[10px] font-bold text-gray-500 uppercase">Atleta</label>
+          <input type="text" id="athleteName" value="Gordon Ryan" class="bg-transparent font-bold text-brand-dark focus:outline-none w-full text-sm">
+        </div>
+        <div class="bg-white/80 backdrop-blur rounded-xl p-3 border border-white/40 shadow-sm">
+          <label class="block text-[10px] font-bold text-gray-500 uppercase">Peso (kg)</label>
+          <input type="text" id="athleteWeight" value="99 kg" class="bg-transparent font-bold text-brand-dark focus:outline-none w-full text-sm">
+        </div>
+        <div class="bg-white/80 backdrop-blur rounded-xl p-3 border border-white/40 shadow-sm">
+          <label class="block text-[10px] font-bold text-gray-500 uppercase">Estatura</label>
+          <input type="text" id="athleteHeight" value="1.88 m" class="bg-transparent font-bold text-brand-dark focus:outline-none w-full text-sm">
+        </div>
+        <div class="bg-white/80 backdrop-blur rounded-xl p-3 border border-white/40 shadow-sm">
+          <label class="block text-[10px] font-bold text-gray-500 uppercase">Categoría</label>
+          <input type="text" id="athleteCategory" value="Heavyweight" class="bg-transparent font-bold text-brand-dark focus:outline-none w-full text-sm">
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN SCENARIOS WORKSPACE -->
+  <main class="max-w-7xl mx-auto px-4 w-full flex-grow flex flex-col gap-8">
+    
+    <!-- Controls Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white/60 backdrop-blur p-4 rounded-2xl border border-white">
+      <div class="flex items-center gap-2">
+        <i data-lucide="git-fork" class="w-5 h-5 text-brand-accent"></i>
+        <span class="font-bold text-sm text-brand-dark">Escenarios Principales del Gameplan</span>
+      </div>
+      
+      <button onclick="generatePoster()" class="w-full sm:w-auto bg-brand-dark hover:bg-brand-navy text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg transition duration-200">
+        <i data-lucide="download" class="w-5 h-5"></i>
+        Guardar & Generar JPG (9:16)
+      </button>
+    </div>
+
+    <!-- Scenarios Tree Container -->
+    <div id="scenariosContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- 4 Main Scenarios generated by JS -->
+    </div>
+
+  </main>
+
+  <!-- TECHNIQUE SELECTOR MODAL -->
+  <div id="techModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-brand-softBg border border-white/50 rounded-2xl p-6 w-full max-w-lg shadow-2xl flex flex-col max-h-[85vh]">
+      
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center gap-2">
+          <i data-lucide="search" class="w-5 h-5 text-brand-accent"></i>
+          <h3 class="font-bold text-lg text-brand-dark">Añadir Técnica / Paso</h3>
+        </div>
+        <button onclick="closeModal()" class="text-gray-500 hover:text-brand-dark">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative mb-4">
+        <input type="text" id="techSearch" oninput="filterTechniques()" placeholder="Buscar técnica (ej. Heel Hook, Arm Drag, Single Leg...)" class="w-full bg-white border border-brand-beige/80 rounded-xl px-4 py-3 text-sm font-semibold text-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-accent">
+      </div>
+
+      <!-- Techniques List -->
+      <div id="techList" class="flex-grow overflow-y-auto space-y-2 pr-1">
+        <!-- JS items -->
+      </div>
+
+      <!-- Custom Tech Option -->
+      <div class="mt-4 pt-3 border-t border-brand-beige/50 flex gap-2">
+        <input type="text" id="customTechInput" placeholder="O escribe una técnica personalizada..." class="flex-grow bg-white border border-brand-beige/80 rounded-xl px-3 py-2 text-sm font-semibold text-brand-dark focus:outline-none">
+        <button onclick="addCustomTech()" class="bg-brand-accent hover:bg-brand-purple text-white px-4 py-2 rounded-xl text-sm font-bold">Añadir</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HIDDEN POSTER CONTAINER FOR EXPORT (1080x1920) -->
+  <div class="fixed top-[-9999px] left-[-9999px]">
+    <div id="posterCanvas" class="w-[1080px] h-[1920px] bg-brand-dark text-white p-12 flex flex-col justify-between font-sans relative overflow-hidden" style="background: radial-gradient(circle at top right, #132830 0%, #0A1D24 100%);">
+      
+      <!-- Background Decorative Grid -->
+      <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#CDB9B4_1px,transparent_1px)] [background-size:24px_24px]"></div>
+
+      <!-- Poster Header -->
+      <div class="relative z-10 flex justify-between items-start border-b border-white/10 pb-8">
+        <div>
+          <div class="text-brand-beige text-xs font-black tracking-widest uppercase mb-1">NO-GI JIU JITSU GAMEPLAN</div>
+          <h1 id="posterAthleteName" class="text-5xl font-black text-white">GORDON RYAN</h1>
+          <div class="flex items-center gap-6 mt-3 text-brand-beige/80 font-bold text-lg">
+            <span id="posterAthleteWeight">Peso: 99 kg</span>
+            <span>•</span>
+            <span id="posterAthleteHeight">Estatura: 1.88 m</span>
+            <span>•</span>
+            <span id="posterAthleteCategory">Heavyweight</span>
+          </div>
+        </div>
+        <div class="bg-brand-accent p-4 rounded-2xl">
+          <i data-lucide="shield" class="w-12 h-12 text-white"></i>
+        </div>
+      </div>
+
+      <!-- Poster Scenarios Flowchart Grid -->
+      <div id="posterScenariosGrid" class="relative z-10 grid grid-cols-2 gap-8 my-auto h-[1500px]">
+        <!-- Dynamic content filled during export -->
+      </div>
+
+      <!-- Poster Footer -->
+      <div class="relative z-10 border-t border-white/10 pt-6 flex justify-between items-center text-brand-beige/60 text-sm font-bold uppercase tracking-widest">
+        <span>Diseñado en BJJ Gameplan Studio</span>
+        <span>No-Gi Tactical System</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    // BJJ Database técnicas No-Gi principales recuperadas
+    const bjjDatabase = [
+      "Single Leg", "Double Leg", "Blast Double", "Ankle Pick", "High Crotch", "Arm Drag Takedown", 
+      "Snap Down", "Fireman's Carry", "Outside Single", "Knee Tap", "Body Lock Takedown", 
+      "Guillotine Choke", "Darce Choke", "Anaconda Choke", "Arm In Guillotine", "Closed Guard Pull", 
+      "Butterfly Guard Pull", "DLR Guard Pull", "Double Guard Pull", "K-Guard", "De La Riva Guard", 
+      "Reverse De La Riva", "Single Leg X", "X-Guard", "Butterfly Guard", "Half Guard", 
+      "Rubber Guard", "Williams Guard", "Z-Guard", "Clamp Guard", "Outside Ashi Garami", 
+      "Inside Sankaku (411)", "50/50 Guard", "Backside 50/50", "Body Lock Pass", "Toreando Pass", 
+      "Knee Cut", "Over Under Pass", "Double Underpass", "High Step Pass", "Leg Drag", 
+      "Back Step Pass", "Sao Paulo Pass", "Smash Pass", "Armbar", "Triangle Choke", "Omoplata", 
+      "Kimura", "Inside Heel Hook", "Outside Heel Hook", "Toe Hold", "Kneebar", "Straight Ankle Lock", 
+      "Aoki Lock", "Estima Lock", "Rear Naked Choke", "Back Control", "Chair Sit Back Control", 
+      "Crucifix", "North South Choke", "Ezekiel Choke", "Buggy Choke", "Tarikoplata"
+    ];
+
+    // Scenarios initial structure
+    let gameplan = {
+      takedown: {
+        title: "TAKEDOWN",
+        icon: "zap",
+        color: "#434AA3",
+        nodes: [
+          { id: 1, name: "Single Leg", type: "Ataque Base", note: "Entrada limpia con cabeza al pecho" },
+          { id: 2, name: "Running the Pipe", type: "Finish", note: "Desequilibrio atrás" }
+        ]
+      },
+      guardPull: {
+        title: "GUARD PULL",
+        icon: "shield-down",
+        color: "#5B51D8",
+        nodes: [
+          { id: 3, name: "K-Guard Pull", type: "Entrada Guard", note: "Grip en talón distante" },
+          { id: 4, name: "Inside Heel Hook", type: "Finalización", note: "Aislamiento de pierna" }
+        ]
+      },
+      guardPass: {
+        title: "GUARD PASS",
+        icon: "arrow-right-left",
+        color: "#0A1D24",
+        nodes: [
+          { id: 5, name: "Body Lock Pass", type: "Pase Presión", note: "Conectar manos bajo la cadera" },
+          { id: 6, name: "Mount Control", type: "Posición Dominante", note: "S-Mount para armbar" }
+        ]
+      },
+      doublePull: {
+        title: "DOUBLE PULL",
+        icon: "repeat",
+        color: "#8B5CF6",
+        nodes: [
+          { id: 7, name: "Ankle Pick desde DLR", type: "Wrestle Up", note: "Levantada rápida" }
+        ]
+      }
+    };
+
+    let activeScenarioKey = null;
+
+    // Render Scenarios
+    function renderScenarios() {
+      const container = document.getElementById('scenariosContainer');
+      container.innerHTML = '';
+
+      Object.keys(gameplan).forEach(key => {
+        const scenario = gameplan[key];
+        
+        let nodesHTML = scenario.nodes.map((node, index) => `
+          <div class="relative flex flex-col items-center">
+            <!-- Connector Line -->
+            ${index > 0 ? '<div class="w-0.5 h-6 bg-brand-accent/50 my-1"></div>' : ''}
+            
+            <div class="node-card w-full bg-white rounded-xl p-3 border border-brand-beige/80 shadow-sm relative group">
+              <div class="flex justify-between items-start mb-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-brand-purple bg-brand-softBg px-2 py-0.5 rounded-md">${node.type || 'Paso'}</span>
+                <button onclick="removeNode('${key}', ${node.id})" class="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <h4 class="font-bold text-brand-dark text-sm">${node.name}</h4>
+              <p class="text-xs text-gray-500 mt-1">${node.note || ''}</p>
+            </div>
+          </div>
+        `).join('');
+
+        const card = document.createElement('div');
+        card.className = "bg-brand-cardBg/70 backdrop-blur rounded-2xl p-5 border border-white flex flex-col justify-between shadow-sm";
+        card.innerHTML = `
+          <div>
+            <!-- Scenario Title -->
+            <div class="flex items-center gap-3 mb-4 pb-3 border-b border-brand-beige/60">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background-color: ${scenario.color}">
+                <i data-lucide="${scenario.icon}" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-extrabold text-brand-dark text-base tracking-wide">${scenario.title}</h3>
+            </div>
+
+            <!-- Nodes List -->
+            <div class="space-y-1 mb-4">
+              ${nodesHTML}
+            </div>
+          </div>
+
+          <!-- Add Node Button -->
+          <button onclick="openModal('${key}')" class="w-full mt-2 py-2.5 border-2 border-dashed border-brand-accent/40 hover:border-brand-accent text-brand-accent font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition bg-white/40 hover:bg-white">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Añadir Técnica / Rama
+          </button>
+        `;
+
+        container.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    // Modal Control
+    function openModal(scenarioKey) {
+      activeScenarioKey = scenarioKey;
+      document.getElementById('techModal').classList.remove('hidden');
+      document.getElementById('techSearch').value = '';
+      filterTechniques();
+    }
+
+    function closeModal() {
+      document.getElementById('techModal').classList.add('hidden');
+      activeScenarioKey = null;
+    }
+
+    // Filter BJJ Techniques
+    function filterTechniques() {
+      const query = document.getElementById('techSearch').value.toLowerCase();
+      const techList = document.getElementById('techList');
+      techList.innerHTML = '';
+
+      const filtered = bjjDatabase.filter(t => t.toLowerCase().includes(query));
+
+      filtered.forEach(tech => {
+        const item = document.createElement('div');
+        item.className = "p-3 bg-white rounded-xl border border-brand-beige/60 hover:border-brand-accent cursor-pointer flex justify-between items-center transition";
+        item.innerHTML = `
+          <span class="font-bold text-sm text-brand-dark">${tech}</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-brand-accent"></i>
+        `;
+        item.onclick = () => selectTechnique(tech);
+        techList.appendChild(item);
+      });
+
+      lucide.createIcons();
+    }
+
+    function selectTechnique(techName) {
+      if (!activeScenarioKey) return;
+
+      gameplan[activeScenarioKey].nodes.push({
+        id: Date.now(),
+        name: techName,
+        type: "Técnica",
+        note: "Paso táctico"
+      });
+
+      renderScenarios();
+      closeModal();
+    }
+
+    function addCustomTech() {
+      const input = document.getElementById('customTechInput');
+      if (input.value.trim() !== '') {
+        selectTechnique(input.value.trim());
+        input.value = '';
+      }
+    }
+
+    function removeNode(scenarioKey, nodeId) {
+      gameplan[scenarioKey].nodes = gameplan[scenarioKey].nodes.filter(n => n.id !== nodeId);
+      renderScenarios();
+    }
+
+    // GENERATE 9:16 POSTER JPG/PNG
+    function generatePoster() {
+      // Update Poster Header Data
+      document.getElementById('posterAthleteName').innerText = document.getElementById('athleteName').value.toUpperCase();
+      document.getElementById('posterAthleteWeight').innerText = `Peso: ${document.getElementById('athleteWeight').value}`;
+      document.getElementById('posterAthleteHeight').innerText = `Estatura: ${document.getElementById('athleteHeight').value}`;
+      document.getElementById('posterAthleteCategory').innerText = document.getElementById('athleteCategory').value;
+
+      // Render Poster Scenarios
+      const posterGrid = document.getElementById('posterScenariosGrid');
+      posterGrid.innerHTML = '';
+
+      Object.keys(gameplan).forEach(key => {
+        const scenario = gameplan[key];
+
+        let posterNodesHTML = scenario.nodes.map((node, index) => `
+          <div class="flex flex-col items-center w-full">
+            ${index > 0 ? '<div class="w-1 h-8 bg-brand-accent/80 my-1"></div>' : ''}
+            <div class="w-full bg-white/10 border border-white/20 rounded-2xl p-4 text-center backdrop-blur shadow-md">
+              <span class="text-[11px] font-black uppercase text-brand-beige tracking-widest block mb-1">${node.type || 'Paso'}</span>
+              <div class="text-xl font-black text-white">${node.name}</div>
+              ${node.note ? `<div class="text-xs text-brand-beige/70 mt-1 font-semibold">${node.note}</div>` : ''}
+            </div>
+          </div>
+        `).join('');
+
+        const col = document.createElement('div');
+        col.className = "bg-white/5 border border-white/10 rounded-3xl p-6 flex flex-col items-center justify-start gap-4";
+        col.innerHTML = `
+          <div class="flex items-center gap-3 w-full pb-4 border-b border-white/10">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black" style="background-color: ${scenario.color}">
+              <i data-lucide="${scenario.icon}" class="w-6 h-6"></i>
+            </div>
+            <h2 class="text-2xl font-black text-white">${scenario.title}</h2>
+          </div>
+          <div class="w-full flex flex-col items-center gap-2">
+            ${posterNodesHTML || '<span class="text-white/40 italic text-sm mt-4">Sin técnicas configuradas</span>'}
+          </div>
+        `;
+
+        posterGrid.appendChild(col);
+      });
+
+      lucide.createIcons();
+
+      // Render Image
+      const posterElement = document.getElementById('posterCanvas');
+      
+      html2canvas(posterElement, {
+        scale: 1,
+        useCORS: true,
+        backgroundColor: '#0A1D24'
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `Gameplan-${document.getElementById('athleteName').value.replace(/\s+/g, '_')}.jpg`;
+        link.href = canvas.toDataURL('image/jpeg', 0.95);
+        link.click();
+      });
+    }
+
+    // Init App
+    renderScenarios();
+  </script>
+</body>
+</html>
