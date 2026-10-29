@@ -89,7 +89,7 @@
 
             <div class="flex items-center gap-3">
                 <button onclick="resetGameplan()" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-brand-dark transition-all duration-200">
-                    <i class="fa-solid fa-rotate-left mr-1.5"></i> Reiniciar Vacio
+                    <i class="fa-solid fa-rotate-left mr-1.5"></i> Reiniciar Vacío
                 </button>
                 <button onclick="openExportModal()" class="px-5 py-2.5 bg-brand-dark hover:bg-brand-blue text-white rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2">
                     <i class="fa-solid fa-file-export"></i>
@@ -167,7 +167,7 @@
         </section>
     </main>
 
-    <!-- EDIT / ADD NODE MODAL WITH SEARCH -->
+    <!-- EDIT / ADD NODE MODAL WITH DROPDOWN MENU & SEARCH -->
     <div id="edit-modal" class="fixed inset-0 bg-brand-dark/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-brand-sand rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-brand-beige/80 soft-shadow space-y-5">
             <div class="flex justify-between items-center border-b border-brand-beige/60 pb-4">
@@ -178,17 +178,25 @@
             </div>
 
             <div class="space-y-4">
-                <!-- Direct Database Search -->
+                <!-- DROPDOWN SELECT MENU -->
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Buscar en BJJ Database</label>
-                    <input type="text" id="tech-search-input" oninput="filterDatabase()" placeholder="Escribe para buscar (ej. Heel Hook, Arm Drag, Single Leg...)" class="w-full bg-white border border-brand-beige/80 rounded-2xl px-4 py-3 text-sm font-semibold text-brand-dark focus:outline-none focus:border-brand-blue">
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Seleccionar del Catálogo de Técnicas</label>
+                    <select id="tech-dropdown-select" onchange="onDropdownSelect(this.value)" class="w-full bg-white border border-brand-beige/80 rounded-2xl px-4 py-3 text-sm font-semibold text-brand-dark focus:outline-none focus:border-brand-blue">
+                        <!-- Rendered dynamically -->
+                    </select>
+                </div>
+
+                <!-- BJJ Database Quick Search -->
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">O filtrar por búsqueda manual</label>
+                    <input type="text" id="tech-search-input" oninput="filterDatabase()" placeholder="Buscar (ej. Heel Hook, Arm Drag, Single Leg...)" class="w-full bg-white border border-brand-beige/80 rounded-2xl px-4 py-3 text-sm font-semibold text-brand-dark focus:outline-none focus:border-brand-blue">
                     <div id="search-results" class="mt-2 max-h-40 overflow-y-auto space-y-1 hidden bg-white p-2 rounded-xl border border-brand-beige/60">
                         <!-- Results -->
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nombre de la Técnica / Acción</label>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nombre de la Técnica / Acción Seleccionada</label>
                     <input type="text" id="node-title-input" class="w-full bg-white border border-brand-beige/80 rounded-2xl px-4 py-3 text-sm font-semibold text-brand-dark focus:outline-none focus:border-brand-blue">
                 </div>
 
@@ -323,16 +331,30 @@
             }
         };
 
+        // CATÁLOGO EXPANDIDO DE TÉCNICAS Y SETUPS DE CONTROL
         const bjjDatabaseList = [
+            // Setups & Controls Solicitados
+            "False Reap", "Cross Ashi Garami", "Irimi Ashi Garami", "Inside Ashi", "Outside Ashi", "Criss Cross Ashi",
+            "Lockdown", "Netfish", "The Truck", "Twister", "Scottish Twister", 
+            "50/50", "70/30", "80/20", "90/10", "Double 50/50", "Backside 50/50",
+            "Calf Slicer", "Ham Sandwich", "Vaporizer",
+            "Rubber Guard", "New York", "Zombie", "Dead Orchard", "Gogo Clinch", "Neils Knot", "Gogo Plata", "Stoner Control",
+            
+            // Derribos y Entradas
             "Single Leg", "Double Leg", "Blast Double", "Ankle Pick", "High Crotch", "Arm Drag Takedown", 
             "Snap Down", "Fireman's Carry", "Outside Single", "Knee Tap", "Body Lock Takedown", 
-            "Guillotine Choke", "Darce Choke", "Anaconda Choke", "Arm In Guillotine", "Closed Guard Pull", 
-            "Butterfly Guard Pull", "DLR Guard Pull", "Double Guard Pull", "K-Guard", "De La Riva Guard", 
+            
+            // Guardias
+            "Closed Guard Pull", "Butterfly Guard Pull", "DLR Guard Pull", "Double Guard Pull", "K-Guard", "De La Riva Guard", 
             "Reverse De La Riva", "Single Leg X", "X-Guard", "Butterfly Guard", "Half Guard", 
-            "Rubber Guard", "Williams Guard", "Z-Guard", "Clamp Guard", "Outside Ashi Garami", 
-            "Inside Sankaku (411)", "50/50 Guard", "Backside 50/50", "Body Lock Pass", "Toreando Pass", 
-            "Knee Cut", "Over Under Pass", "Double Underpass", "High Step Pass", "Leg Drag", 
-            "Back Step Pass", "Sao Paulo Pass", "Smash Pass", "Armbar", "Triangle Choke", "Omoplata", 
+            "Williams Guard", "Z-Guard", "Clamp Guard", "Outside Ashi Garami", "Inside Sankaku (411)",
+            
+            // Pases de Guardia
+            "Body Lock Pass", "Toreando Pass", "Knee Cut", "Over Under Pass", "Double Underpass", "High Step Pass", "Leg Drag", 
+            "Back Step Pass", "Sao Paulo Pass", "Smash Pass", 
+            
+            // Finalizaciones
+            "Guillotine Choke", "Darce Choke", "Anaconda Choke", "Arm In Guillotine", "Armbar", "Triangle Choke", "Omoplata", 
             "Kimura", "Inside Heel Hook", "Outside Heel Hook", "Toe Hold", "Kneebar", "Straight Ankle Lock", 
             "Aoki Lock", "Estima Lock", "Rear Naked Choke", "Back Control", "Chair Sit Back Control", 
             "Crucifix", "North South Choke", "Ezekiel Choke", "Buggy Choke", "Tarikoplata"
@@ -355,7 +377,37 @@
             renderTabs();
             renderTree();
             loadProfile();
+            populateDropdown();
         };
+
+        function populateDropdown() {
+            const select = document.getElementById('tech-dropdown-select');
+            select.innerHTML = '<option value="">-- Seleccionar técnica del menú --</option>';
+            bjjDatabaseList.sort().forEach(tech => {
+                const opt = document.createElement('option');
+                opt.value = tech;
+                opt.textContent = tech;
+                select.appendChild(opt);
+            });
+        }
+
+        function onDropdownSelect(val) {
+            if(!val) return;
+            document.getElementById('node-title-input').value = val;
+
+            // Configurar categoría automática para Setups y Controles
+            const setupTechs = [
+                "False Reap", "Cross Ashi Garami", "Irimi Ashi Garami", "Inside Ashi", "Outside Ashi", "Criss Cross Ashi",
+                "Lockdown", "Netfish", "The Truck", "Twister", "Scottish Twister", 
+                "50/50", "70/30", "80/20", "90/10", "Double 50/50", "Backside 50/50",
+                "Calf Slicer", "Ham Sandwich", "Vaporizer",
+                "Rubber Guard", "New York", "Zombie", "Dead Orchard", "Gogo Clinch", "Neils Knot", "Gogo Plata", "Stoner Control"
+            ];
+
+            if(setupTechs.includes(val)) {
+                document.getElementById('node-type-input').value = 'setup';
+            }
+        }
 
         function saveState() {
             localStorage.setItem('ejj_empty_gameplan_data', JSON.stringify(gameplanData));
@@ -492,10 +544,10 @@
             document.getElementById('node-title-input').value = "";
             document.getElementById('node-notes-input').value = "";
             document.getElementById('node-type-input').value = "setup";
+            document.getElementById('tech-dropdown-select').value = "";
             document.getElementById('tech-search-input').value = "";
             document.getElementById('btn-delete-node').classList.add('hidden');
             
-            // Store target parent ID temporarily
             window.targetParentIdForAdd = parentId;
             document.getElementById('edit-modal').classList.remove('hidden');
         }
@@ -509,6 +561,7 @@
                 document.getElementById('node-title-input').value = target.node.title;
                 document.getElementById('node-notes-input').value = target.node.notes || "";
                 document.getElementById('node-type-input').value = target.node.type || "setup";
+                document.getElementById('tech-dropdown-select').value = "";
                 document.getElementById('tech-search-input').value = "";
                 document.getElementById('btn-delete-node').classList.remove('hidden');
                 document.getElementById('edit-modal').classList.remove('hidden');
@@ -539,7 +592,7 @@
         }
 
         function selectTechFromSearch(techName) {
-            document.getElementById('node-title-input').value = techName;
+            onDropdownSelect(techName);
             document.getElementById('search-results').classList.add('hidden');
             document.getElementById('tech-search-input').value = "";
         }
@@ -555,7 +608,6 @@
             }
 
             if(window.targetParentIdForAdd) {
-                // ADDING NEW
                 const parentTarget = findNodeAndParent(window.targetParentIdForAdd);
                 if(parentTarget) {
                     parentTarget.node.children.push({
@@ -567,7 +619,6 @@
                     });
                 }
             } else if(activeNodeIdForEdit) {
-                // EDITING EXISTING
                 const target = findNodeAndParent(activeNodeIdForEdit);
                 if(target) {
                     target.node.title = title;
