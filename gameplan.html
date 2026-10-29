@@ -333,7 +333,12 @@
 
         // CATÁLOGO EXPANDIDO DE TÉCNICAS Y SETUPS DE CONTROL
         const bjjDatabaseList = [
-            // Setups & Controls Solicitados
+            // Baro a Posision ken Controls
+            "Mount", "North South", "Dorsal Pin", "Side Control", "Half Guard Top",
+            "High Tripod Pass", "Floating Pass", "Leg Drag",
+            "Dagestani Handcuff", "Claw Grip", "Berimbolo",
+
+            // Setups & Controls Solicitados Vias
             "False Reap", "Cross Ashi Garami", "Irimi Ashi Garami", "Inside Ashi", "Outside Ashi", "Criss Cross Ashi",
             "Lockdown", "Netfish", "The Truck", "Twister", "Scottish Twister", 
             "50/50", "70/30", "80/20", "90/10", "Double 50/50", "Backside 50/50",
@@ -347,10 +352,10 @@
             // Guardias
             "Closed Guard Pull", "Butterfly Guard Pull", "DLR Guard Pull", "Double Guard Pull", "K-Guard", "De La Riva Guard", 
             "Reverse De La Riva", "Single Leg X", "X-Guard", "Butterfly Guard", "Half Guard", 
-            "Williams Guard", "Z-Guard", "Clamp Guard", "Outside Ashi Garami", "Inside Sankaku (411)",
+            "Williams Guard", "Z-Guard", "Clamp Guard", "Inside Sankaku (411)",
             
             // Pases de Guardia
-            "Body Lock Pass", "Toreando Pass", "Knee Cut", "Over Under Pass", "Double Underpass", "High Step Pass", "Leg Drag", 
+            "Body Lock Pass", "Toreando Pass", "Knee Cut", "Over Under Pass", "Double Underpass", "High Step Pass", 
             "Back Step Pass", "Sao Paulo Pass", "Smash Pass", 
             
             // Finalizaciones
@@ -395,8 +400,8 @@
             if(!val) return;
             document.getElementById('node-title-input').value = val;
 
-            // Configurar categoría automática para Setups y Controles
             const setupTechs = [
+                "Mount", "North South", "Dorsal Pin", "Side Control", "Half Guard Top", "Dagestani Handcuff", "Claw Grip", "Berimbolo",
                 "False Reap", "Cross Ashi Garami", "Irimi Ashi Garami", "Inside Ashi", "Outside Ashi", "Criss Cross Ashi",
                 "Lockdown", "Netfish", "The Truck", "Twister", "Scottish Twister", 
                 "50/50", "70/30", "80/20", "90/10", "Double 50/50", "Backside 50/50",
@@ -404,8 +409,12 @@
                 "Rubber Guard", "New York", "Zombie", "Dead Orchard", "Gogo Clinch", "Neils Knot", "Gogo Plata", "Stoner Control"
             ];
 
+            const passTechs = ["High Tripod Pass", "Floating Pass", "Leg Drag"];
+
             if(setupTechs.includes(val)) {
                 document.getElementById('node-type-input').value = 'setup';
+            } else if(passTechs.includes(val)) {
+                document.getElementById('node-type-input').value = 'pass';
             }
         }
 
